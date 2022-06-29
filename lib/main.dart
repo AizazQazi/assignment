@@ -1,6 +1,8 @@
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import "package:fluttertoast/fluttertoast.dart";
+import 'package:blurrycontainer/blurrycontainer.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -28,15 +30,11 @@ class Home_1 extends StatefulWidget {
 class Home_1state extends State<Home_1> {
 
   void shw(){
-    Fluttertoast.showToast(
-        msg: "This is Center Short Toast",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 2,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0
-    );
+    // Within the `FirstRoute` widget
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const Home_2()),
+      );
     if (kDebugMode) {
       print("hi...");
     }
@@ -124,6 +122,130 @@ class Home_1state extends State<Home_1> {
         ),
       ]),
 
+    );
+  }
+}
+
+
+class Home_2 extends StatefulWidget {
+  const Home_2({Key? key}) : super(key: key);
+  @override
+  State<StatefulWidget> createState() {
+    return Home_2state();
+  }
+}
+
+// ignore: camel_case_types
+class Home_2state extends State<Home_2> {
+  login() {
+    if (_formKey.currentState!.validate()) {
+
+      Fluttertoast.showToast(
+          msg: "Team created!!!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 2,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+    
+  }
+  bak(){
+    Navigator.pop(context);
+  }
+  final _formKey = GlobalKey<FormState>();
+  @override
+  Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("app bar"),
+      ),
+      body: Stack(
+        children: [
+          Container(
+            height: height,
+            width: width,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.purple, Colors.blue],
+                begin: Alignment.bottomLeft,
+                end: Alignment.topRight,
+                stops: [0.4, 0.6],
+                tileMode: TileMode.repeated,
+              ),
+            ),
+          ),
+          Center(
+            child: BlurryContainer(
+              blur: 10,
+              borderRadius: const BorderRadius.all(Radius.circular(60)),
+              child: Container(
+                height: height * 0.50,
+                width: width * 0.80,
+                color: Colors.white.withOpacity(0.2),
+                child: SingleChildScrollView(
+                  child: Form(
+                    key: _formKey,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 100),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          TextFormField(
+                            decoration: const InputDecoration(
+                              icon: Icon(Icons.people_outline),
+                              labelText: 'Team name',
+                              hintText: 'Enter your team name',
+                              labelStyle: TextStyle(color: Colors.white),
+
+                            ),
+                            validator: (value){
+                              if (value == null || value.isEmpty) {
+                                return 'please enter name of team';
+                              }
+                              return null;
+                            },
+                          ),
+                          TextFormField(
+                            validator: (value){
+                              if (value == null || value.isEmpty) {
+                                return 'please enter name of team mates';
+                              }
+                              return null;
+                            },
+                            decoration: const InputDecoration(
+                              icon: Icon(Icons.person_add_alt),
+                              hintText: 'Enter name of team members',
+                              label: Text('team mates'),
+                              labelStyle: TextStyle(color: Colors.white),
+                            ),
+
+                          ),
+                          ElevatedButton(
+                            onPressed: login,
+                            style: ElevatedButton.styleFrom(
+
+                              primary: Colors.black26,
+                              padding: const EdgeInsets.only(left: 7),
+                            ),
+
+                            child: const Text("login"),
+                          ),
+
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
